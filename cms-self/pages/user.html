@@ -1,0 +1,165 @@
+<link rel="stylesheet" href="css/user.css">
+
+<div id="well" style="overflow-y:scroll">
+	<button class="btn btn-success btn-sm" id="myBtn">新增</button>
+	<div class="content">
+		<div class="hidden" id="userOne">
+			<div class="img deleteById">
+				<img src="" alt="" class="touxiang">
+			</div>
+			<span class="hidden id" style="display:none;"></span>
+			<ul class="guUl">
+				<li>用户名</li>
+				<li>真实姓名</li>
+				<li>email</li>
+				<li>状态</li>
+			</ul>
+			<ul class="myUl">
+				<li></li>  <!-- username -->
+				<li></li>  <!-- nickname -->
+				<li></li>  <!-- email -->
+				<li></li>  <!-- 状态 -->
+			</ul>
+		</div>
+	</div>
+	<div class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:300px;">
+				<div class="modal-header">
+			        <span class="myTitle">添加用户</span>
+			        <span class="close myClose">&times;</span>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+			          	<div class="form-group">
+			            	<label for="username" class="control-label">用户名：</label>
+			            	<input type="text" class="form-control" id="username">
+			          	</div>
+			          	<div class="form-group">
+			            	<label for="pwd" class="control-label">密码：</label>
+			            	<input type="passward" class="form-control" id="pwd">
+			          	</div>
+			          	<div class="form-group">
+			            	<label for="resetpwd" class="control-label">重置密码：</label>
+			            	<input type="passward" class="form-control" id="resetpwd">
+			          	</div>
+			          	<div class="form-group">
+			            	<label for="name" class="control-label">真实姓名：</label>
+			            	<input type="text" class="form-control" id="name">
+			          	</div>
+			          	<div class="form-group">
+			            	<label for="name" class="control-label">email：</label>
+			            	<input type="email" class="form-control" id="email">
+			          	</div>
+			          	<div class="form-group">
+			            	<label for="userface" class="control-label">头像上传：</label>
+			            	<input type="text" class="form-control" id="userface">
+			          	</div>
+			        </form>
+			    </div>
+			    <div class="modal-footer">
+			        	<button type="button" class="btn btn-default myClose">关闭</button>
+			        	<button type="button" class="btn btn-success submit">确认</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$.get("http://120.78.164.247:8099/manager/user/findAllUser",function(results){
+			// console.log(results.data);
+			//获取所有用户信息
+			var users=results.data;
+			// console.log(users);
+			users.forEach(function(item){
+				var cloneDiv=$(".hidden").clone();
+				cloneDiv.removeAttr("class");
+				//设置每一个值
+				// if(item.userface){
+				// 	$(".touxiang").attr("src",item.userface);
+				// 	cloneDiv.find(".touxiang").attr("src",item.userface);
+				// }else{
+				// 	$(".touxiang").attr("src","./images/女1.jpg");
+				// }
+				cloneDiv.children()[1].innerHTML=item.id;
+				cloneDiv.children()[3].children[0].innerHTML=item.username;
+				cloneDiv.children()[3].children[1].innerHTML=item.nickname;
+				cloneDiv.children()[3].children[2].innerHTML=item.email;
+				cloneDiv.find(".touxiang").attr("src",item.userface);
+				$(".content").append(cloneDiv);
+			});
+			// 单个删除
+			$(".deleteById").click(function(){
+				var id=$(this).parent().children()[1].innerHTML;
+				// alert(id);
+				var o={
+					id:Number(id)
+				}
+				$.get("http://120.78.164.247:8099/manager/user/deleteUserById",o,function(results){
+					if(results.status==200){
+						$("#body-right").load("pages/user.html");
+					}else{
+						alert("删除失败！");
+					}
+				});
+			});
+			//新增
+			$("#myBtn").click(function(){
+				$(".modal").modal('show');
+			});
+			//模态框确认
+			$(".submit").click(function(item){
+				var username=$("#username").val();
+				var pwd=$("#pwd").val();
+				var repwd=$("#resetpwd").val();
+				var name=$("#name").val();
+				var email=$("#email").val();
+				var userface=$("#userface").val();
+
+				var regPwd=/^[a-zA-Z]\w{5,17}$/ig;
+				var pwdTest=regPwd.test(pwd);
+
+				if(username&&name){
+					if(pwdTest){
+						if(pwd==repwd){
+							var o={
+								username:username,
+								passward:pwd,
+								nickname:name,
+								email:email,
+								userface:userface
+							}
+							// console.log(o);
+							//发送保存请求
+							$.post("http://120.78.164.247:8099/manager/user/saveOrUpdateUser",o,function(results){
+								if(results.status==200){
+									$(".modal").modal("hide");
+									$("#body-right").load("pages/user.html");
+								}
+								// console.log(results);
+							});
+						}else{
+							$("#resetpwd").css({
+								"border":"1px solid red"
+							});
+						}
+					}else{
+						$("#pwd").css({
+							"border":"1px solid red"
+						});
+					}
+				}else{
+					$("input").css({
+						"border":"1px solid red"
+					});
+				}
+			});
+			//模态框取消
+			$(".myClose").click(function(){
+				$(".modal").modal("hide");
+			});
+		});
+	});
+</script>

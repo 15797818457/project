@@ -1,0 +1,218 @@
+<link rel="stylesheet" href="css/lanmu.css">
+
+<div id="well" style="overflow-y:scroll">
+	<button class="btn btn-success btn-sm" id="myBtn1">新增</button>
+	<button class="btn btn-danger btn-sm" id="myBtn2">批量删除</button>
+	<table class="table table-bordered table-hover table-condensed" id="table">
+		<thead>
+			<th>编号</th>
+			<th>栏目名称</th>
+			<th>父栏目</th>
+			<th>描述</th>
+			<th>操作</th>
+		</thead>
+		<tbody>
+			<tr class="hidden">
+				<td><input type="checkbox" class="myCheck"></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<i class="glyphicon glyphicon-pencil update"></i>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<i class="glyphicon glyphicon-trash deleteById"></i>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content" style="width:400px;">
+				<div class="modal-header">
+			        <span class="myTitle">添加栏目</span>
+			        <span class="close myClose">&times;</span>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+			          	<div class="form-group">
+			          		<span class="hidden hiddenId"></span>
+			            	<label for="lanmuname" class="control-label">栏目名称：</label>
+			            	<input type="text" class="form-control" id="lanmuname">
+			          	</div>
+			          	<div class="form-group">
+			            	<label for="parentlanmu" class="control-label">父栏目：</label>
+			            	<select name="planmu" class="form-control" id="parentlanmu">
+			            		<option value="">---请选择---</option>
+			            	</select>
+			          	</div>
+			          	<div class="form-group">
+				            <label for="message-text" class="control-label">描述：</label>
+				            <textarea class="form-control" id="message-text"></textarea>
+				        </div>
+			        </form>
+			    </div>
+			    <div class="modal-footer">
+			        <button class="btn btn-default myClose">取消</button>
+					<button class="btn btn-danger submit">确认</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$.get("http://120.78.164.247:8099/manager/category/findAllCategory",function(results){
+			// 获取所有栏目信息
+			var lanmus=results.data;
+			lanmus.forEach(function(item){
+				var cloneTr=$(".hidden").clone();
+				cloneTr.removeAttr("class");
+				// 设置每一个tr的属性值
+				cloneTr.children(":first").children(":first").val(item.id);
+				$(cloneTr.children()[1]).text(item.name);
+				$(cloneTr.children()[3]).text(item.comment);
+				if(item.parent){
+					$(cloneTr.children()[2]).text(item.parent.name);
+				}else{
+					$(cloneTr.children()[2]).text("无");
+				}
+				$("tbody").append(cloneTr);
+
+				//追加模态框中父栏目的option
+				var option="<option value='"+item.id+"'>"+item.name+"</option>";
+				$("#parentlanmu").append(option);
+			});
+			//模态框取消
+			$(".myClose").click(function(){
+				$(".modal").modal("hide");
+			});
+			//单个删除
+			$(".deleteById").click(function(){
+				var id=$(this).parent().parent().children(":first").children().val();
+				// alert(id);
+				var o={
+					id:Number(id)
+				}
+				$.get("http://120.78.164.247:8099/manager/category/deleteCategoryById",o,function(results){
+					if(results.status==200){
+						$("#body-right").load("pages/lanmu.html");
+					}else{
+						alert("删除失败！");
+					}
+				});
+			});
+			//批量删除
+			$("#myBtn2").click(function(){
+				var ids=[];
+				$(".myCheck:checked").each(function(index,item){
+					var id=$(item).val();
+					ids.push(id);
+				});				
+				if(ids.length){
+					var o={
+						ids:ids.toString()
+					}
+					$.post("http://120.78.164.247:8099/manager/category/batchDeleteCategory",o,function(results){
+						if(results.status==200){
+							$("#body-right").load("pages/lanmu.html");
+						}
+					});
+				}else{
+					alert("请选择要删除的项目");
+				}				
+			});
+			//新增
+			$("#myBtn1").click(function(){
+				//修改栏目模态框表头
+				$(".myTitle").text("添加栏目");
+				//模态框显示之前先清空表单内容
+				$("#lanmuname").val("");
+				$("#message-text").val("");
+				$("#parentlanmu").val("");
+				$(".hiddenId").text("");
+				//显示模态框
+				$(".modal").modal("show");
+			});
+			//模态框确认按钮
+			$(".submit").click(function(){
+				var name=$("#lanmuname").val();
+				var mess=$("#message-text").val();
+				var parent=$("#parentlanmu").val();
+				var hiddenId=$(".hiddenId").text();
+				if(hiddenId){
+					//id存在，修改
+					if(name && mess){
+						if(parent){
+							var o={
+								id:hiddenId,
+								name:name,
+								comment:mess,
+								parentId:parent,
+								no:1
+							}
+						}else{
+							var o={
+								id:hiddenId,
+								name:name,
+								comment:mess,
+								no:1
+							}
+						}
+					}else{
+						alert("请输入内容");
+					}
+				}else{
+					//id不存在，添加
+					if(name && mess){
+						if(parent){
+							var o={
+								name:name,
+								comment:mess,
+								parentId:parent,
+								no:1
+							}
+						}else{
+							var o={
+								name:name,
+								comment:mess,
+								no:1
+							}
+						}
+					}else{
+						alert("请输入内容");
+					}
+				}
+				//发送保存请求
+				$.post("http://120.78.164.247:8099/manager/category/saveOrUpdateCategory",o,function(results){
+					if(results.status==200){
+						$(".modal").modal("hide");
+						$("#body-right").load("pages/lanmu.html");
+					}
+					console.log(results);
+				});
+			});
+			//修改按钮 更新
+			$(".update").click(function(){
+				$(".modal").modal("show");
+				//修改栏目模态框表头
+				$(".myTitle").text("修改栏目");
+				//获取当前行数据进行展示
+				var name=$(this).parent().parent().children()[1].innerHTML;
+				var mess=$(this).parent().parent().children()[3].innerHTML;
+				var parent=$(this).parent().parent().children()[2].innerHTML;
+				//获取id 放在隐藏元素中用来判断是否为修改
+				var hiddenId=$(this).parent().parent().children(":first").children().val();
+				$(".hiddenId").text(hiddenId);
+
+				var id=lanmus.filter(function(item){
+					return item.name==parent;
+				})[0].id;
+				// 设置
+				$("#lanmuname").val(name);
+				$("#message-text").val(mess);
+				$("#parentlanmu").val(id);
+			});
+		});
+	});
+</script>

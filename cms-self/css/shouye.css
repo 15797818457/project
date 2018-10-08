@@ -1,0 +1,34 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+#well1{
+	width: 810px;
+	height: 240px;
+	margin-top: 20px;
+}
+#well1 .top-left{
+	padding: 0;
+}
+#well1 .top-left img{
+	display: inline-block;
+	width: 200px;
+	margin-bottom: 6px;
+}
+#well1 #tuTwo{
+	padding: 0;
+}
+#well1 .left-top{
+	margin-bottom: 20px;
+}
+#well2{
+	width: 760px;
+	height: 420px;
+	margin-top: 20px;
+	/*background-color: red;*/
+	padding: 0;
+}
+#well2>div:first-child{
+	/*margin-right: 10px;*/
+	margin-left: -10px;
+}

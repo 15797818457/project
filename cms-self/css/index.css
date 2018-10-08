@@ -1,0 +1,61 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+#nav-left-top{
+	background-color: #3D556D;
+	color: #fff;
+	line-height: 38px;
+}
+#logoimg{
+	width: 30px;
+	height: 30px;
+	margin-left: 20px;
+	margin-right: 5px;
+}
+#nav-right-top{
+	background-color: #fff;
+	line-height: 34px;
+	border-right: 1px solid #CCCCCC;
+}
+#myLiebiao1,#myLaba{
+	font-size: 24px;
+	margin-right: 20px
+}
+#touxiangimg{
+	width: 30px;
+	line-height: 30px;
+	border-radius: 50%;
+	margin-left: 540px;
+	margin-right: 5px;
+}
+
+#body-left{
+	background-color: #282830;
+	color: #fff;
+	height: 800px;
+}
+#body-left>ul>li{
+	list-style: none;
+	border-bottom: 1px solid #333333;
+	margin-top: 10px;
+	cursor: pointer;
+}
+#body-left>ul>li:first-child{
+	margin-top: 40px;
+}
+#body-left>ul>li>p{
+	display: inline-block;
+	margin-left: 20px;
+}
+#body-left>ul>li>p>span{
+	margin-right: 40px;
+}
+#body-left>ul>li>p>#shouye{
+	margin-right: 70px;
+}
+#body-right{
+	background-color: #EEEEEE;
+	height: 800px;
+	border-right: 1px solid #CCCCCC;
+}

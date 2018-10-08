@@ -1,0 +1,139 @@
+<link rel="stylesheet" href="css/shouye.css">
+
+<div id="well1">
+	<div class="col-md-3 top-left">
+		<img src="images/1.png" alt="">
+		<img src="images/2.png" alt="">
+		<img src="images/3.png" alt="">
+	</div>
+	<div class="col-md-6" id="tuOne" style="width:345px;height:240px;"></div>
+	<div class="col-md-3" id="tuTwo">
+		<div class="left-top" style="width:203px;height:109px;"></div>
+		<div class="left-bottom" style="width:203px;height:109px;"></div>
+	</div>
+</div>
+<div id="well2">
+	<div class="col-md-6" id="bottom-left" style="width:385px;height:420px;"></div>
+	<div class="col-md-6" id="bottom-right" style="width:385px;height:420px;"></div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        // 上中图表
+        $('#tuOne').highcharts({
+            credits:{
+                enabled:false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Pageviews',
+                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            }, {
+                name: 'Visitors',
+                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+            }]
+        });
+        //上右图表
+        $('.left-top').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Year 1800',
+                data: [107, 31, 635, 203, 2]
+            }]
+        });
+
+        $('.left-bottom').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['Firefox',   45.0],
+                    ['IE',       26.8],
+                    {
+                        name: 'Chrome',
+                        y: 12.8,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['Safari',    8.5],
+                    ['Opera',     6.2],
+                    ['Others',   0.7]
+                ]
+            }]
+        });
+        //下左图表
+        $('#bottom-left').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['Firefox',   45.0],
+                    ['IE',       26.8],
+                    {
+                        name: 'Chrome',
+                        y: 12.8,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['Safari',    8.5],
+                    ['Opera',     6.2],
+                    ['Others',   0.7]
+                ]
+            }]
+        });
+        //下右图表
+        $('#bottom-right').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['Firefox',   45.0],
+                    ['IE',       26.8],
+                    {
+                        name: 'Chrome',
+                        y: 12.8,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['Safari',    8.5],
+                    ['Opera',     6.2],
+                    ['Others',   0.7]
+                ]
+            }]
+        });
+    });
+</script>

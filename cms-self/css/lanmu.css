@@ -1,0 +1,25 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+#well{
+	width: 750px;
+	height: 700px;
+	margin-top: 20px;
+	background-color: #fff;
+	border-radius: 6px;
+}
+#myBtn1,#myBtn2{
+	margin-left: 20px;
+	margin-top: 10px;
+}
+#table{
+	width: 720px;
+	margin: 20px auto 0;
+}
+#table th,#table td{
+	text-align: center;
+}
+.modal-header .myTitle{
+	margin-left: 140px;
+}
